@@ -1,0 +1,70 @@
+﻿using Core.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Core.Interfaces;
+namespace Infrastructure.Data
+{
+    public class SepcificationEvaluator<T> where T : BaseEntity
+    {
+        public static IQueryable<T> GetQuery(IQueryable<T> query, ISpecification<T> spec)
+        {
+            if (spec.Criteria != null)
+            {
+                query = query.Where(spec.Criteria); //
+
+            }
+            if(spec.OrderBy!= null)
+            {
+                query = query.OrderBy(spec.OrderBy);
+            }
+            if(spec.OrderByDescending!= null)
+            {
+                query=query.OrderByDescending(spec.OrderByDescending);
+            }
+
+            if (spec.IsDistinct)
+            {
+                query.Distinct();
+            }
+
+            return query;
+
+        }
+
+        public static IQueryable<TResult> GetQuery<TSepc,TResult>(IQueryable<T> query, ISpecification<T,TResult> spec)
+        {
+            if (spec.Criteria != null)
+            {
+                query = query.Where(spec.Criteria); //
+
+            }
+            if (spec.OrderBy != null)
+            {
+                query = query.OrderBy(spec.OrderBy);
+            }
+            if (spec.OrderByDescending != null)
+            {
+                query = query.OrderByDescending(spec.OrderByDescending);
+            }
+
+            var selectQuery = query as IQueryable<TResult>;
+
+            if (spec.select != null) {
+                selectQuery = query.Select(spec.select);
+            }
+
+            if (spec.IsDistinct)
+            {
+                selectQuery = selectQuery?.Distinct();
+            }
+
+            return selectQuery ?? query.Cast<TResult>();    
+
+        }
+
+
+    }
+}
