@@ -43,7 +43,7 @@ namespace API.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateProduct(int id, Product product) {
 
-            if (product.Id != id || !ProductExist(id) ) return BadRequest("Cannot Update this Product");
+            if (product.Id != id ||  ! await ProductExist(id) ) return BadRequest("Cannot Update this Product");
 
             repo.Update(product);
 
@@ -84,9 +84,9 @@ namespace API.Controllers
             return Ok (await repo.ListAsync(spec));
         }
 
-        private bool ProductExist(int id)
+        private async Task< bool> ProductExist(int id)
         {
-            return repo.Exist(id);
+            return await repo.Exist(id);
         }
 
     }

@@ -19,9 +19,9 @@ namespace Infrastructure.Data
             return await query.CountAsync();
         }
 
-        public bool Exist(int id)
+        public async Task<bool> Exist(int id)
         {
-            return context.Set<T>().Any(x => x.Id == id);
+            return await context.Set<T>().AnyAsync(x => x.Id == id);
         }
 
         public async Task<T?> GetByIdAsync(int id)
@@ -66,9 +66,10 @@ namespace Infrastructure.Data
 
         public void Update(T entity)
         {
-            context.Set<T>().Attach(entity);
-
-            context.Entry(entity).State = EntityState.Modified;
+            context.Entry(entity).State =
+                context.Entry(entity).State == EntityState.Detached
+                    ? EntityState.Modified
+                    : context.Entry(entity).State;
         }
 
         private IQueryable<T> ApplySepcification(ISpecification<T> spec)

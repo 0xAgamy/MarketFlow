@@ -19,7 +19,7 @@ namespace Core.Interfaces
         int Take { get; }
         int Skip { get; }
 
-        bool IsPagingEnable { get; }
+        bool IsPagingEnabled { get; }
 
         IQueryable<T> ApplyCriteria(IQueryable<T> query);
 
@@ -27,6 +27,6 @@ namespace Core.Interfaces
 
     public interface ISpecification<T, TResult> : ISpecification<T>
     {
-        Expression<Func<T, TResult>>? select { get; }
+        Expression<Func<T, TResult>>? Select { get; }
     }
 }

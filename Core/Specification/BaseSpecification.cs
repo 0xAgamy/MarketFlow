@@ -1,11 +1,5 @@
 ﻿using Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Core.Specification
 {
     public class BaseSpecification<T>(Expression<Func<T, bool>> criteria) : ISpecification<T>
@@ -23,7 +17,7 @@ namespace Core.Specification
 
         public int Skip { get; private set; }
 
-        public bool IsPagingEnable { get; private set; }
+        public bool IsPagingEnabled { get; private set; }
 
         public IQueryable<T> ApplyCriteria(IQueryable<T> query)
         {
@@ -53,7 +47,7 @@ namespace Core.Specification
         {
             Skip = skip;
             Take = take;
-            IsPagingEnable= true;
+            IsPagingEnabled= true;
         }
 
     }
@@ -64,12 +58,12 @@ namespace Core.Specification
     {
         protected BaseSpecification() : this(null) { }
 
-        public Expression<Func<T, TResult>>? select { get; private set; }
+        public Expression<Func<T, TResult>>? Select { get; private set; }
 
 
         protected void AddSelect(Expression<Func<T,TResult>> selectExpression)
         {
-            select = selectExpression;
+            Select = selectExpression;
         }
     }
 }

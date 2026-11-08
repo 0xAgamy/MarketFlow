@@ -13,7 +13,10 @@
         public int PageSize
         {
             get => _pageSize;
-            set => _pageSize = (value<MaxPageSize) ? value : MaxPageSize;
+            set{
+                if (value <=0 ) value =6;
+                _pageSize= Math.Min(value,MaxPageSize);
+            }
         }
 
 

@@ -34,7 +34,7 @@ namespace Core.Interfaces
 
         Task<bool> SaveAllAsync();
 
-        bool Exist(int id);
+        Task<bool> Exist(int id);
         //
 
         Task<int> CountAsync(ISpecification<T>spec);
