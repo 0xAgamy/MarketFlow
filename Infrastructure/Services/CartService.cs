@@ -1,39 +1,48 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
-    public class CartService(IConnectionMultiplexer redis) : ICartService
+    public class CartService(IConnectionMultiplexer redis,IConfiguration _config) : ICartService
     {
         private readonly IDatabase _database= redis.GetDatabase();
-        public async Task<bool> DeleteCartAsync(string key)
-        {
-           return await _database.KeyDeleteAsync(key);
-        }
+        private TimeSpan Expiry =>
+                        TimeSpan.FromDays(_config.GetValue("Redis:CartDefaultExpiryInDays", 30));
 
-        public async Task<ShoppingCart?> GetCartAsync(string key)
-        {
-            var data= await _database.StringGetAsync(key);
+        private static string GetCartKey(string id) => $"cart:{id}";
+       
+        
 
-            return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<ShoppingCart>((string)data!);
+        public async Task<ShoppingCart?> GetCartAsync(string id)
+        {
+            var data= await _database.StringGetAsync(GetCartKey(id));
+
+            return data.IsNullOrEmpty 
+                        ? null 
+                        : JsonSerializer.Deserialize<ShoppingCart>((string)data!);
 
         }
 
         public async Task<ShoppingCart?> SetCartAsync(ShoppingCart cart)
         {
-            var created = await _database.StringSetAsync(cart.Id,
-                JsonSerializer.Serialize(cart),
-                TimeSpan.FromDays(30));
+           
+            
+            var created = await _database.StringSetAsync(
+            GetCartKey(cart.Id),
+            JsonSerializer.Serialize(cart),
+            Expiry);
 
             if (!created) return null;
             return await GetCartAsync(cart.Id);
+        }
+
+
+        public async Task<bool> DeleteCartAsync(string id)
+        {
+           return await _database.KeyDeleteAsync(GetCartKey(id));
         }
     }
 }

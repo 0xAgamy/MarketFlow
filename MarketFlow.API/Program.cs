@@ -45,10 +45,12 @@ builder.Services.AddCors();
 // Addin Redis Services
 builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
 {
-    var conStrings = builder.Configuration.GetConnectionString("Redis");
-    if (conStrings == null) throw new Exception("Cannot Get Redis Connection STrings");
-    var configuration = ConfigurationOptions.Parse(conStrings,true);
+   var configuration = ConfigurationOptions.Parse(
+        builder.Configuration.GetConnectionString("Redis")
+        ?? throw new Exception("Cannot get Redis connection string"), true);
 
+    configuration.AbortOnConnectFail = false;
+    configuration.ConnectRetry = 5;
 
     return ConnectionMultiplexer.Connect(configuration);
 

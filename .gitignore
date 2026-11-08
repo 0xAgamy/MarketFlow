@@ -9,3 +9,4 @@ obj/
 # IDE
 .vs/
 .idea/
+.vscode

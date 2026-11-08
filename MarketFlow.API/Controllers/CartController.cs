@@ -32,5 +32,7 @@ namespace API.Controllers
             if (!result) return BadRequest("Problem Deleting Cart");
             return Ok();
         }
+
+        //TODO: Implement checkout with price validation
     }
 }
