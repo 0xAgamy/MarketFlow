@@ -68,7 +68,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>) , typeof(GenericReposito
 
 //
 
-builder.Services.AddSingleton<ICartServices, CartServices>();
+builder.Services.AddSingleton<ICartService, CartService>();
 
 //
 var app = builder.Build();

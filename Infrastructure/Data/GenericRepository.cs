@@ -1,11 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
@@ -78,12 +73,12 @@ namespace Infrastructure.Data
 
         private IQueryable<T> ApplySepcification(ISpecification<T> spec)
         {
-            return SepcificationEvaluator<T>.GetQuery(context.Set<T>().AsQueryable(), spec);
+            return SpecificationEvaluator<T>.GetQuery(context.Set<T>().AsQueryable(), spec);
         }
 
         private IQueryable<TResult> ApplySepcification<TResult>(ISpecification<T,TResult> spec)
         {
-            return SepcificationEvaluator<T>.GetQuery<T,TResult>(context.Set<T>().AsQueryable(), spec);
+            return SpecificationEvaluator<T>.GetQuery<T,TResult>(context.Set<T>().AsQueryable(), spec);
         }
     }
 }

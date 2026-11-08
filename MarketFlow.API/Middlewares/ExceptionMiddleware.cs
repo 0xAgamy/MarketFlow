@@ -24,8 +24,8 @@ namespace API.Middlewares
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
             var response = env.IsDevelopment()
-                ? new ApiErorrResponse(context.Response.StatusCode, ex.Message, ex.StackTrace)
-                : new ApiErorrResponse(context.Response.StatusCode, ex.Message, "Internal Server Error");
+                ? new ApiResponse(context.Response.StatusCode, ex.Message, ex.StackTrace)
+                : new ApiResponse(context.Response.StatusCode, ex.Message, "Internal Server Error");
 
             var options = new JsonSerializerOptions
             {

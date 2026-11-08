@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.Specification
+﻿namespace Core.Specification
 {
     public class ProductSpecParams
     {
@@ -46,7 +40,7 @@ namespace Core.Specification
             }
         }
 
-        public string? sort { get; set; }
+        public string? Sort { get; set; }
 
         public string? _search;
         public string? Search

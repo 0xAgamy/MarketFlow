@@ -2,11 +2,10 @@
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Core.Specification;
-using API.RequestHeplers;
 namespace API.Controllers
 {
 
-    public class ProductsController(IGenericRepository<Product>repo) : BaserApiController
+    public class ProductsController(IGenericRepository<Product>repo) : BaseApiController
     {
         
 
@@ -14,7 +13,7 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts([FromQuery]ProductSpecParams specParams)
         {
 
-            var spec = new ProductSepcfication(specParams);
+            var spec = new ProductSpecification(specParams);
 
 
             return await CreatePageResult(repo, spec, specParams.PageIndex, specParams.PageSize); 
@@ -38,7 +37,7 @@ namespace API.Controllers
             if (await repo.SaveAllAsync()) {
                 return CreatedAtAction("GetProduct", new {id=product.Id},product); 
             }
-            return BadRequest("Problem Createing Product");
+            return BadRequest("Problem Creating Product");
         }
 
         [HttpPut("{id:int}")]
@@ -67,7 +66,7 @@ namespace API.Controllers
             repo.Remove(prd);
 
             if (await repo.SaveAllAsync()) { return NoContent(); }
-            return BadRequest("Problem Deleteing Product");
+            return BadRequest("Problem Deleting Product");
         }
 
         [HttpGet("Brands")]

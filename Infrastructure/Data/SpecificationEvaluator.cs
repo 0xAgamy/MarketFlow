@@ -1,13 +1,8 @@
 ﻿using Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Core.Interfaces;
 namespace Infrastructure.Data
 {
-    public class SepcificationEvaluator<T> where T : BaseEntity
+    public class SpecificationEvaluator<T> where T : BaseEntity
     {
         public static IQueryable<T> GetQuery(IQueryable<T> query, ISpecification<T> spec)
         {

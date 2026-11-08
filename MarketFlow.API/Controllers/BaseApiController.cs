@@ -1,4 +1,4 @@
-﻿using API.RequestHeplers;
+﻿using API.RequestHelpers;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BaserApiController:ControllerBase
+    public class BaseApiController:ControllerBase
     {
 
         protected async Task<ActionResult> CreatePageResult<T>(IGenericRepository<T>repo,

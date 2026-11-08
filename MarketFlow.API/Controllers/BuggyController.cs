@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class BuggyController:BaserApiController
+    public class BuggyController:BaseApiController
     {
 
         [HttpGet("unauthorized")]

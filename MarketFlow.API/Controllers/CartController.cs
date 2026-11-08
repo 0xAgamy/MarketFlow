@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class CartController(ICartServices cartServices):BaserApiController
+    public class CartController(ICartService cartServices):BaseApiController
     {
 
         [HttpGet]

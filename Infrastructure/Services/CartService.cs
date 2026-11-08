@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
-    public class CartServices(IConnectionMultiplexer redis) : ICartServices
+    public class CartService(IConnectionMultiplexer redis) : ICartService
     {
         private readonly IDatabase _database= redis.GetDatabase();
         public async Task<bool> DeleteCartAsync(string key)

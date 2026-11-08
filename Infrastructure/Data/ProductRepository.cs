@@ -1,12 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Infrastructure.Data
 {
     public class ProductRepository(StoreContext context) : IProductRepository
@@ -28,7 +22,7 @@ namespace Infrastructure.Data
                 .Distinct()
                 .ToListAsync();
         }
-        public async Task<IReadOnlyList<string>> GetTypessAsync() {
+        public async Task<IReadOnlyList<string>> GetTypesAsync() {
             return await context.Products.Select(a => a.Type)
                 .Distinct()
                 .ToListAsync();
