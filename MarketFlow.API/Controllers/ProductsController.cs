@@ -2,6 +2,8 @@
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Core.Specification;
+using API.DTOs;
+using MarketFlow.API.Mapping;
 namespace API.Controllers
 {
 
@@ -31,8 +33,9 @@ namespace API.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Product>> AddProduct(Product product)
+        public async Task<ActionResult<Product>> AddProduct(CreateProductDTO productDto)
         {
+            var product= productDto.ToEntity();
             repo.Add(product);
             if (await repo.SaveAllAsync()) {
                 return CreatedAtAction("GetProduct", new {id=product.Id},product); 
@@ -41,15 +44,14 @@ namespace API.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> UpdateProduct(int id, Product product) {
+        public async Task<ActionResult> UpdateProduct(int id, CreateProductDTO productDto) {
 
-            if (product.Id != id ||  ! await ProductExist(id) ) return BadRequest("Cannot Update this Product");
+            var product= productDto.ToEntity();
+            if (product is null) return NotFound();
+            product.UpdateFrom(productDto);
 
-            repo.Update(product);
-
-           if(await  repo.SaveAllAsync()) {return NoContent();}
-
-            return BadRequest("Problem Updating Product");
+            if (await repo.SaveAllAsync()) return NoContent();
+            return BadRequest("Problem updating product");
 
 
         }

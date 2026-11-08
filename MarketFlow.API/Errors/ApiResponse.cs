@@ -1,6 +1,6 @@
 ﻿namespace API.Errors
 {
-    public class ApiResponse(int statusCode,  string message ,string? details)
+    public class ApiResponse(int statusCode,  string message ,string? details=null)
     {
 
         public int StatusCode { get; set; } = statusCode;

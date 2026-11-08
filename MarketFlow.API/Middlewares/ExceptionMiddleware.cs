@@ -4,38 +4,36 @@ using System.Text.Json;
 
 namespace API.Middlewares
 {
-    public class ExceptionMiddleware(IHostEnvironment env,RequestDelegate next)
+    public class ExceptionMiddleware(IHostEnvironment env,
+                                    RequestDelegate next,
+                                    ILogger<ExceptionMiddleware> logger)
     {
         public async Task InvokeAsync(HttpContext context)
         {
             try
             {
                 await next(context);
-            }
-            catch (Exception ex) { 
-                await HandleExceptionAsync(context,ex,env);
-            }
-        }
-
-        private static Task HandleExceptionAsync(HttpContext context, Exception ex, IHostEnvironment env)
-        {
-
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-            var response = env.IsDevelopment()
-                ? new ApiResponse(context.Response.StatusCode, ex.Message, ex.StackTrace)
-                : new ApiResponse(context.Response.StatusCode, ex.Message, "Internal Server Error");
-
-            var options = new JsonSerializerOptions
+                
+            }catch(Exception ex)
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            };
+                logger.LogError(ex, "Unhandled exception for {Method} {Path}",
+                                context.Request.Method, context.Request.Path);
 
-            var json = JsonSerializer.Serialize(response, options);
+                context.Response.ContentType="applicaiton/json";
+                context.Response.StatusCode=(int)HttpStatusCode.InternalServerError;
 
+                var response = env.IsDevelopment()
+                ? new ApiResponse(500, ex.Message, ex.StackTrace)
+                : new ApiResponse(500, "Internal server error");
 
-            return context.Response.WriteAsync(json);
+                var options = new JsonSerializerOptions
+                    { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response, options));
+                
+            }
         }
+
+
     }
 }
