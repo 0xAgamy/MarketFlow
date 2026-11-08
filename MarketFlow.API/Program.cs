@@ -7,6 +7,28 @@ using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Load env/config.json (connection strings + Redis env data)
+var envConfigPath = FindEnvConfigFile();
+if (envConfigPath is not null)
+{
+    builder.Configuration.AddJsonFile(envConfigPath, optional: false, reloadOnChange: true);
+}
+else
+{
+    throw new Exception("Cannot find env/config.json file");
+}
+
+static string? FindEnvConfigFile()
+{
+    // Walk up from the app base directory (bin/Debug/net10.0/...) to the solution root
+    for (var current = new DirectoryInfo(AppContext.BaseDirectory); current is not null; current = current.Parent)
+    {
+        var candidate = Path.Combine(current.FullName, "env", "config.json");
+        if (File.Exists(candidate)) return candidate;
+    }
+    return null;
+}
+
 // Add services to the container.
 
 builder.Services.AddControllers();

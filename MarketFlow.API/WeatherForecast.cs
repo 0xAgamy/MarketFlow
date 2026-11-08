@@ -1,4 +1,4 @@
-namespace skinet
+namespace MarketFlow.API
 {
     public class WeatherForecast
     {

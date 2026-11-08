@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace skinet.Controllers
+namespace MarketFlow.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

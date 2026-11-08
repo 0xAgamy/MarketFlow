@@ -22,7 +22,7 @@ namespace Infrastructure.Services
         {
             var data= await _database.StringGetAsync(key);
 
-            return data.IsNullOrEmpty ? null: JsonSerializer.Deserialize<ShoppingCart?>(data!);
+            return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<ShoppingCart>((string)data!);
 
         }
 
